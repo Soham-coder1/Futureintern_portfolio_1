@@ -4,29 +4,29 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MySQL DB connection
-require('dotenv').config();
-
+// Create MySQL connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: {
-    ca: fs.readFileSync(process.env.SSL_CA_PATH)
-  }
+  ssl: process.env.SSL_CA_PATH
+    ? {
+        ca: fs.readFileSync(process.env.SSL_CA_PATH)
+      }
+    : undefined
 });
-
 
 // Connect to DB and create tables
 db.connect((err) => {

@@ -15,8 +15,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MySQL DB connection
 require('dotenv').config();
-const fs = require('fs');
-const mysql = require('mysql2');
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
